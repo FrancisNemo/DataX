@@ -5,20 +5,13 @@ import com.alibaba.datax.common.plugin.RecordSender;
 import com.alibaba.datax.common.spi.Reader;
 import com.alibaba.datax.common.util.Configuration;
 import com.alibaba.datax.plugin.unstructuredstorage.reader.UnstructuredStorageReaderUtil;
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/master
 import org.apache.commons.io.Charsets;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-<<<<<<< HEAD
 import java.io.BufferedReader;
-=======
-import java.io.InputStream;
->>>>>>> origin/master
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -61,11 +54,7 @@ public class HdfsReader extends Reader {
 
         }
 
-<<<<<<< HEAD
         private void validate(){
-=======
-        public void validate(){
->>>>>>> origin/master
             this.readerOriginConfig.getNecessaryValue(Key.DEFAULT_FS,
                     HdfsReaderErrorCode.DEFAULT_FS_NOT_FIND_ERROR);
 
@@ -89,23 +78,12 @@ public class HdfsReader extends Reader {
             }
 
             specifiedFileType = this.readerOriginConfig.getNecessaryValue(Key.FILETYPE, HdfsReaderErrorCode.REQUIRED_VALUE);
-<<<<<<< HEAD
             if( !specifiedFileType.equalsIgnoreCase("ORC") &&
                     !specifiedFileType.equalsIgnoreCase("TEXT")){
                 String message = "HdfsReader插件目前只支持ORC和TEXT两种格式的文件," +
                         "如果您需要指定读取的文件类型，请将filetype选项的值配置为ORC或者TEXT";
                 throw DataXException.asDataXException(
                         HdfsReaderErrorCode.FILE_TYPE_ERROR, message);
-=======
-            if( !specifiedFileType.equalsIgnoreCase(Constant.ORC) &&
-                    !specifiedFileType.equalsIgnoreCase(Constant.TEXT) &&
-                    !specifiedFileType.equalsIgnoreCase(Constant.CSV) &&
-                    !specifiedFileType.equalsIgnoreCase(Constant.SEQ) &&
-                    !specifiedFileType.equalsIgnoreCase(Constant.RC)){
-                String message = "HdfsReader插件目前支持ORC, TEXT, CSV, SEQUENCE, RC五种格式的文件," +
-                        "请将fileType选项的值配置为ORC, TEXT, CSV, SEQUENCE 或者 RC";
-                throw DataXException.asDataXException(HdfsReaderErrorCode.FILE_TYPE_ERROR, message);
->>>>>>> origin/master
             }
 
             encoding = this.readerOriginConfig.getString(com.alibaba.datax.plugin.unstructuredstorage.reader.Key.ENCODING, "UTF-8");
@@ -121,28 +99,10 @@ public class HdfsReader extends Reader {
                         HdfsReaderErrorCode.ILLEGAL_VALUE,
                         String.format("运行配置异常 : %s", e.getMessage()), e);
             }
-<<<<<<< HEAD
-=======
-            //check Kerberos
-            Boolean haveKerberos = this.readerOriginConfig.getBool(Key.HAVE_KERBEROS, false);
-            if(haveKerberos) {
-                this.readerOriginConfig.getNecessaryValue(Key.KERBEROS_KEYTAB_FILE_PATH, HdfsReaderErrorCode.REQUIRED_VALUE);
-                this.readerOriginConfig.getNecessaryValue(Key.KERBEROS_PRINCIPAL, HdfsReaderErrorCode.REQUIRED_VALUE);
-            }
->>>>>>> origin/master
 
             // validate the Columns
             validateColumns();
 
-<<<<<<< HEAD
-=======
-            if(this.specifiedFileType.equalsIgnoreCase(Constant.CSV)){
-                //compress校验
-                UnstructuredStorageReaderUtil.validateCompress(this.readerOriginConfig);
-                UnstructuredStorageReaderUtil.validateCsvReaderConfig(this.readerOriginConfig);
-            }
-
->>>>>>> origin/master
         }
 
         private void validateColumns(){
@@ -192,11 +152,7 @@ public class HdfsReader extends Reader {
 
         @Override
         public void prepare() {
-<<<<<<< HEAD
             LOG.info("prepare()");
-=======
-            LOG.info("prepare(), start to getAllFiles...");
->>>>>>> origin/master
             this.sourceFiles = dfsUtil.getAllFiles(path, specifiedFileType);
             LOG.info(String.format("您即将读取的文件数为: [%s], 列表为: [%s]",
                     this.sourceFiles.size(),
@@ -260,10 +216,7 @@ public class HdfsReader extends Reader {
         private static Logger LOG = LoggerFactory.getLogger(Reader.Task.class);
         private Configuration taskConfig;
         private List<String> sourceFiles;
-<<<<<<< HEAD
         private HdfsFileType fileType;
-=======
->>>>>>> origin/master
         private String specifiedFileType;
         private String encoding;
         private DFSUtil dfsUtil = null;
@@ -292,7 +245,6 @@ public class HdfsReader extends Reader {
             LOG.info("read start");
             for (String sourceFile : this.sourceFiles) {
                 LOG.info(String.format("reading file : [%s]", sourceFile));
-<<<<<<< HEAD
                 fileType = dfsUtil.checkHdfsFileType(sourceFile);
 
                 if((fileType.equals(HdfsFileType.TEXT) || fileType.equals(HdfsFileType.COMPRESSED_TEXT))
@@ -309,34 +261,11 @@ public class HdfsReader extends Reader {
                 }else {
 
                     String message = String.format("文件[%s]的类型与用户配置的fileType类型不一致，" +
-                            "请确认您配置的目录下面所有文件的类型均为[%s]"
+                                    "请确认您配置的目录下面所有文件的类型均为[%s]"
                             , sourceFile, this.specifiedFileType);
                     LOG.error(message);
                     throw DataXException.asDataXException(
                             HdfsReaderErrorCode.FILE_TYPE_UNSUPPORT, message);
-=======
-
-                if(specifiedFileType.equalsIgnoreCase(Constant.TEXT)
-                        || specifiedFileType.equalsIgnoreCase(Constant.CSV)) {
-
-                    InputStream inputStream = dfsUtil.getInputStream(sourceFile);
-                    UnstructuredStorageReaderUtil.readFromStream(inputStream, sourceFile, this.taskConfig,
-                            recordSender, this.getTaskPluginCollector());
-                }else if(specifiedFileType.equalsIgnoreCase(Constant.ORC)){
-
-                    dfsUtil.orcFileStartRead(sourceFile, this.taskConfig, recordSender, this.getTaskPluginCollector());
-                }else if(specifiedFileType.equalsIgnoreCase(Constant.SEQ)){
-
-                    dfsUtil.sequenceFileStartRead(sourceFile, this.taskConfig, recordSender, this.getTaskPluginCollector());
-                }else if(specifiedFileType.equalsIgnoreCase(Constant.RC)){
-
-                    dfsUtil.rcFileStartRead(sourceFile, this.taskConfig, recordSender, this.getTaskPluginCollector());
-                }else {
-
-                    String message = "HdfsReader插件目前支持ORC, TEXT, CSV, SEQUENCE, RC五种格式的文件," +
-                            "请将fileType选项的值配置为ORC, TEXT, CSV, SEQUENCE 或者 RC";
-                    throw DataXException.asDataXException(HdfsReaderErrorCode.FILE_TYPE_UNSUPPORT, message);
->>>>>>> origin/master
                 }
 
                 if(recordSender != null){

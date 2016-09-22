@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {
     "name": "ftpwriter",
     "class": "com.alibaba.datax.plugin.writer.ftpwriter.FtpWriter",
@@ -6,12 +5,3 @@
     "developer": "alibaba"
 }
 
-=======
-{
-    "name": "ftpwriter",
-    "class": "com.alibaba.datax.plugin.writer.ftpwriter.FtpWriter",
-    "description": "useScene: test. mechanism: use datax framework to transport data from ftp txt file. warn: The more you know about the data, the less problems you encounter.",
-    "developer": "alibaba"
-}
-
->>>>>>> origin/master

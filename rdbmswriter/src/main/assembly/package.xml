@@ -12,10 +12,6 @@
             <directory>src/main/resources</directory>
             <includes>
                 <include>plugin.json</include>
-<<<<<<< HEAD
-=======
-                <include>plugin_job_template.json</include>
->>>>>>> origin/master
             </includes>
             <outputDirectory>plugin/writer/rdbmswriter</outputDirectory>
         </fileSet>

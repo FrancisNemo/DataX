@@ -7,11 +7,7 @@
 
 HdfsReader提供了读取分布式文件系统数据存储的能力。在底层实现上，HdfsReader获取分布式文件系统上文件的数据，并转换为DataX传输协议传递给Writer。
 
-<<<<<<< HEAD
 **目前HdfsReader仅支持textfile和orcfile两种格式的文件，且文件内容存放的必须是一张逻辑意义上的二维表。**
-=======
-**目前HdfsReader支持的文件格式有textfile（text）、orcfile（orc）、rcfile（rc）、sequence file（seq）和普通逻辑二维表（csv）类型格式的文件，且文件内容存放的必须是一张逻辑意义上的二维表。**
->>>>>>> origin/master
 
 **HdfsReader需要Jdk1.7及以上版本的支持。**
 
@@ -20,11 +16,7 @@ HdfsReader提供了读取分布式文件系统数据存储的能力。在底层�
 
 HdfsReader实现了从Hadoop分布式文件系统Hdfs中读取文件数据并转为DataX协议的功能。textfile是Hive建表时默认使用的存储格式，数据不做压缩，本质上textfile就是以文本的形式将数据存放在hdfs中，对于DataX而言，HdfsReader实现上类比TxtFileReader，有诸多相似之处。orcfile，它的全名是Optimized Row Columnar file，是对RCFile做了优化。据官方文档介绍，这种文件格式可以提供一种高效的方法来存储Hive数据。HdfsReader利用Hive提供的OrcSerde类，读取解析orcfile文件的数据。目前HdfsReader支持的功能如下：
 
-<<<<<<< HEAD
 1. 支持textfile和orcfile两种格式的文件，且要求文件内容存放的是一张逻辑意义上的二维表。
-=======
-1. 支持textfile、orcfile、rcfile、sequence file和csv格式的文件，且要求文件内容存放的是一张逻辑意义上的二维表。
->>>>>>> origin/master
 
 2. 支持多种类型数据读取(使用String表示)，支持列裁剪，支持列常量
 
@@ -34,17 +26,6 @@ HdfsReader实现了从Hadoop分布式文件系统Hdfs中读取文件数据并转
 
 5. 多个File可以支持并发读取。
 
-<<<<<<< HEAD
-=======
-6. 支持sequence file数据压缩，目前支持lzo压缩方式。
-
-7. csv类型支持压缩格式有：gzip、bz2、zip、lzo、lzo_deflate、snappy。
-
-8. 目前插件中Hive版本为1.1.1，Hadoop版本为2.7.1（Apache［为适配JDK1.7］,在Hadoop 2.5.0, Hadoop 2.6.0 和Hive 1.2.0测试环境中写入正常；其它版本需后期进一步测试； 
-
-9. 支持kerberos认证（注意：如果用户需要进行kerberos认证，那么用户使用的Hadoop集群版本需要和hdfsreader的Hadoop版本保持一致，如果高于hdfsreader的Hadoop版本，不保证kerberos认证有效）
-
->>>>>>> origin/master
 我们暂时不能做到：
 
 1. 单个File支持多线程并发读取，这里涉及到单个File内部切分算法。二期考虑支持。
@@ -132,11 +113,7 @@ HdfsReader实现了从Hadoop分布式文件系统Hdfs中读取文件数据并转
 	* 描述：Hadoop hdfs文件系统namenode节点地址。 <br />
 
 
-<<<<<<< HEAD
 		**特别需要注意的是，目前HdfsReader不支持Kerberos等认证，所以用户需要保证DATAX有权限访问该节点**
-=======
-		**目前HdfsReader已经支持Kerberos认证，如果需要权限认证，则需要用户配置kerberos参数，见下面**
->>>>>>> origin/master
 
 
 	* 必选：是 <br />
@@ -145,24 +122,11 @@ HdfsReader实现了从Hadoop分布式文件系统Hdfs中读取文件数据并转
 
 * **fileType**
 
-<<<<<<< HEAD
 	* 描述：文件的类型，目前只支持用户配置为"text"或"orc"。 <br />
-=======
-	* 描述：文件的类型，目前只支持用户配置为"text"、"orc"、"rc"、"seq"、"csv"。 <br />
->>>>>>> origin/master
 
 		text表示textfile文件格式
 
 		orc表示orcfile文件格式
-<<<<<<< HEAD
-=======
-		
-		rc表示rcfile文件格式
-		
-		seq表示sequence file文件格式
-		
-		csv表示普通hdfs文件格式（逻辑二维表）
->>>>>>> origin/master
 
 		**特别需要注意的是，HdfsReader能够自动识别文件是orcfile、textfile或者还是其它类型的文件，但该项是必填项，HdfsReader则会只读取用户配置的类型的文件，忽略路径下其他格式的文件**
 
@@ -240,76 +204,6 @@ HdfsReader实现了从Hadoop分布式文件系统Hdfs中读取文件数据并转
 
  	* 默认值：无 <br />
 
-<<<<<<< HEAD
-=======
-* **haveKerberos**
-
-	* 描述：是否有Kerberos认证，默认false<br />
- 
-		 例如如果用户配置true，则配置项kerberosKeytabFilePath，kerberosPrincipal为必填。
-
- 	* 必选：haveKerberos 为true必选 <br />
- 
- 	* 默认值：false <br />
-
-* **kerberosKeytabFilePath**
-
-	* 描述：Kerberos认证 keytab文件路径，绝对路径<br />
-
- 	* 必选：否 <br />
- 
- 	* 默认值：无 <br />
-
-* **kerberosPrincipal**
-
-	* 描述：Kerberos认证Principal名，如xxxx/hadoopclient@xxx.xxx <br />
-
- 	* 必选：haveKerberos 为true必选 <br />
- 
- 	* 默认值：无 <br />
-
-* **compress**
-
-	* 描述：当fileType（文件类型）为csv下的文件压缩方式，目前仅支持 gzip、bz2、zip、lzo、lzo_deflate、hadoop-snappy、framing-snappy压缩；**值得注意的是，lzo存在两种压缩格式：lzo和lzo_deflate，用户在配置的时候需要留心，不要配错了；另外，由于snappy目前没有统一的stream format，datax目前只支持最主流的两种：hadoop-snappy（hadoop上的snappy stream format）和framing-snappy（google建议的snappy stream format）**;orc文件类型下无需填写。<br />
-
- 	* 必选：否 <br />
- 
- 	* 默认值：无 <br />
-
-* **csvReaderConfig**
-
-	* 描述：读取CSV类型文件参数配置，Map类型。读取CSV类型文件使用的CsvReader进行读取，会有很多配置，不配置则使用默认值。<br />
-
- 	* 必选：否 <br />
- 
- 	* 默认值：无 <br />
-
-        * 常见配置： <br />
-
-		```json
-"csvReaderConfig":{
-                                "safetySwitch": false,
-                                "skipEmptyRecords": false,
-                                "useTextQualifier": false
-                        }
-		```
-
-所有配置项及默认值,配置时 csvReaderConfig 的map中请**严格按照以下字段名字进行配置**：
-		```json
-boolean caseSensitive = true;
-char textQualifier = 34;
-boolean trimWhitespace = true;
-boolean useTextQualifier = true;//是否使用csv转义字符
-char delimiter = 44;//分隔符
-char recordDelimiter = 0;
-char comment = 35;
-boolean useComments = false;
-int escapeMode = 1;
-boolean safetySwitch = true;//单列长度是否限制100000字符
-boolean skipEmptyRecords = true;//是否跳过空行
-boolean captureRawRecord = true;
-		```
->>>>>>> origin/master
 
 ### 3.3 类型转换
 
