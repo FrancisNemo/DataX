@@ -8,17 +8,13 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSON;
 
 public class ColumnEntry {
-<<<<<<< HEAD
     private Integer width;
-=======
->>>>>>> origin/master
     private Integer index;
     private String type;
     private String value;
     private String format;
     private DateFormat dateParse;
 
-<<<<<<< HEAD
     public Integer getWidth() {
         return width;
     }
@@ -27,8 +23,6 @@ public class ColumnEntry {
         this.width = width;
     }
 
-=======
->>>>>>> origin/master
     public Integer getIndex() {
         return index;
     }
