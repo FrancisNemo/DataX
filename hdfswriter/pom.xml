@@ -15,7 +15,11 @@
     <packaging>jar</packaging>
     <properties>
         <hive.version>1.1.1</hive.version>
+<<<<<<< HEAD
         <hadoop.version>2.5.0</hadoop.version>
+=======
+        <hadoop.version>2.7.1</hadoop.version>
+>>>>>>> origin/master
     </properties>
 
     <dependencies>

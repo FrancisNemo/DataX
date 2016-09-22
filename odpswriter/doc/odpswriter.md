@@ -6,13 +6,21 @@
 
 ## 1 快速介绍
 
+<<<<<<< HEAD
 ODPSWriter插件用于实现往ODPS插入或者更新数据，主要提供给etl开发同学将业务数据导入odps，适合于TB,GB数量级的数据传输，如果需要传输PB量级的数据，请选择dt task工具 (http://odps.alibaba-inc.com/download/DTTask_User_Manuals.pdf?spm=0.0.0.0.TWkq8m&file=DTTask_User_Manuals.pdf).
+=======
+ODPSWriter插件用于实现往ODPS插入或者更新数据，主要提供给etl开发同学将业务数据导入odps，适合于TB,GB数量级的数据传输，如果需要传输PB量级的数据，请选择dt task工具 ;
+>>>>>>> origin/master
 
 
 
 ## 2 实现原理
 
+<<<<<<< HEAD
 在底层实现上，ODPSWriter是通过DT Tunnel写入ODPS系统的，有关ODPS的更多技术细节请参看 ODPS主站 http://odps.alibaba-inc.com/ 和ODPS产品文档 http://odps.alibaba-inc.com/doc/
+=======
+在底层实现上，ODPSWriter是通过DT Tunnel写入ODPS系统的，有关ODPS的更多技术细节请参看 ODPS主站 https://data.aliyun.com/product/odps 和ODPS产品文档 https://help.aliyun.com/product/27797.html
+>>>>>>> origin/master
 
 目前 DataX3 依赖的 SDK 版本是：
 
@@ -65,8 +73,13 @@ ODPSWriter插件用于实现往ODPS插入或者更新数据，主要提供给etl
                           "accessId": "**b7**",
                           "accessKey": "***dv**yk**mm",
                           "truncate": true,
+<<<<<<< HEAD
                           "odpsServer": "http://service.odpsstg.aliyun-inc.com/stgnew/",
                           "tunnelServer": "http://tunnel.odpsstg.aliyun-inc.com",
+=======
+                          "odpsServer": "http://service.odps.aliyun.com/api",
+                          "tunnelServer": "http://dt.odps.aliyun.com",
+>>>>>>> origin/master
                           "accountType": "aliyun"
                        }
                     }
@@ -126,14 +139,23 @@ ODPSWriter插件用于实现往ODPS插入或者更新数据，主要提供给etl
 
 * **odpsServer**
 
+<<<<<<< HEAD
 	* 描述：ODPS的server地址，线上地址为 http://service.odps.aliyun-inc.com/api <br />
+=======
+	* 描述：ODPS的server地址，线上地址为 http://service.odps.aliyun.com/api <br />
+>>>>>>> origin/master
 	* 必选：是 <br />
 	* 默认值：无 <br />
 
 * **tunnelServer**
 
+<<<<<<< HEAD
 	* 描述：ODPS的tunnelserver地址，线上地址为 http://dt.odps.aliyun-inc.com  <br />
 	* 必选：是，如果地址是对内的（含有"-inc")则可以不填 <br />
+=======
+	* 描述：ODPS的tunnelserver地址，线上地址为 http://dt.odps.aliyun.com  <br />
+	* 必选：是， <br />
+>>>>>>> origin/master
 	* 默认值：无 <br />
 
 
@@ -240,10 +262,17 @@ ODPSWriter插件用于实现往ODPS插入或者更新数据，主要提供给etl
                         "partition": [
                             "pt=20141010000000,year=2014"
                         ],
+<<<<<<< HEAD
                         "odpsServer": "http://service.odps.aliyun-inc.com/api",
                         "project": "cdo_datasync",
                         "table": "datax3_odpswriter_perf_10column_1kb_00",
                         "tunnelServer": "http://dt.odps.cm11.aliyun-inc.com"
+=======
+                        "odpsServer": "http://service.odps.aliyun.com/api",
+                        "project": "cdo_datasync",
+                        "table": "datax3_odpswriter_perf_10column_1kb_00",
+                        "tunnelServer": "http://dt.odps.aliyun.com"
+>>>>>>> origin/master
                     }
                 },
                 "writer": {

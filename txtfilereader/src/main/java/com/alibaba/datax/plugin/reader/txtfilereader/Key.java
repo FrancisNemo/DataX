@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.alibaba.datax.plugin.reader.txtfilereader;
 
 /**
@@ -6,3 +7,13 @@ package com.alibaba.datax.plugin.reader.txtfilereader;
 public class Key {
 	public static final String PATH = "path";
 }
+=======
+package com.alibaba.datax.plugin.reader.txtfilereader;
+
+/**
+ * Created by haiwei.luo on 14-9-20.
+ */
+public class Key {
+	public static final String PATH = "path";
+}
+>>>>>>> origin/master

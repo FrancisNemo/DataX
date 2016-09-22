@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
     "name": "hbase11xwriter",
     "class": "com.alibaba.datax.plugin.writer.hbase11xwriter.Hbase11xWriter",
@@ -5,3 +6,12 @@
     "developer": "alibaba"
 }
 
+=======
+{
+    "name": "hbase11xwriter",
+    "class": "com.alibaba.datax.plugin.writer.hbase11xwriter.Hbase11xWriter",
+    "description": "use put: prod. mechanism: use hbase java api put data.",
+    "developer": "alibaba"
+}
+
+>>>>>>> origin/master

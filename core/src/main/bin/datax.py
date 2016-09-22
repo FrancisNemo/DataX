@@ -20,7 +20,11 @@ def isWindows():
 
 DATAX_HOME = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+<<<<<<< HEAD
 DATAX_VERSION = 'DATAX-OPENSOURCE-1.0'
+=======
+DATAX_VERSION = 'DATAX-OPENSOURCE-3.0'
+>>>>>>> origin/master
 if isWindows():
     codecs.register(lambda name: name == 'cp65001' and codecs.lookup('utf-8') or None)
     CLASS_PATH = ("%s/lib/*") % (DATAX_HOME)
@@ -200,7 +204,11 @@ def buildStartCommand(options, args):
 def printCopyright():
     print '''
 DataX (%s), From Alibaba !
+<<<<<<< HEAD
 Copyright (C) 2010-2015, Alibaba Group. All Rights Reserved.
+=======
+Copyright (C) 2010-2016, Alibaba Group. All Rights Reserved.
+>>>>>>> origin/master
 
 ''' % DATAX_VERSION
     sys.stdout.flush()
