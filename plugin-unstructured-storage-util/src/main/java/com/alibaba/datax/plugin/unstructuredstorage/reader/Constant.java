@@ -10,4 +10,6 @@ public class Constant {
 	public static final String DEFAULT_NULL_FORMAT = "\\N";
 	
     public static final Integer DEFAULT_BUFFER_SIZE = 8192;
+
+	public static final boolean DEFAULT_FIXED_WIDTH = false;
 }

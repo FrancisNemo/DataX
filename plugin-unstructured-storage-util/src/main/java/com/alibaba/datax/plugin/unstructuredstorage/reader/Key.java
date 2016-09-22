@@ -25,5 +25,7 @@ public class Key {
 	public static final String NULL_FORMAT = "nullFormat";
 	
 	public static final String BUFFER_SIZE = "bufferSize";
+
+	public static final String FIXED_WIDTH = "fixedWidth";
 	
 }

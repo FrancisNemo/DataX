@@ -25,6 +25,10 @@ import org.apache.commons.compress.archivers.dump.DumpArchiveInputStream;
 import org.apache.commons.compress.archivers.jar.JarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;*/
+import com.univocity.parsers.fixed.FixedWidthFieldLengths;
+import com.univocity.parsers.fixed.FixedWidthFields;
+import com.univocity.parsers.fixed.FixedWidthParser;
+import com.univocity.parsers.fixed.FixedWidthParserSettings;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
@@ -281,6 +285,9 @@ public class UnstructuredStorageReaderUtil {
         // .getListConfiguration(Key.COLUMN);
         List<ColumnEntry> column = UnstructuredStorageReaderUtil
                 .getListColumnEntry(readerSliceConfig, Key.COLUMN);
+
+		boolean isFixedWidth = readerSliceConfig.getBool(Key.FIXED_WIDTH, Constant.DEFAULT_FIXED_WIDTH);
+
         CsvReader csvReader  = null;
         
 		// every line logic
@@ -291,14 +298,50 @@ public class UnstructuredStorageReaderUtil {
                 LOG.info(String.format("Header line %s has been skiped.",
                         fetchLine));
             }
-            csvReader = new CsvReader(reader);
-            csvReader.setDelimiter(fieldDelimiter);
-            String[] parseRows;
-            while ((parseRows = UnstructuredStorageReaderUtil
-                    .splitBufferedReader(csvReader)) != null) {
-                UnstructuredStorageReaderUtil.transportOneRecord(recordSender,
-                        column, parseRows, nullFormat, taskPluginCollector);
-            }
+
+			String[] parseRows = null;
+			//增加定长标识符判断
+            if(isFixedWidth){
+				// creates the sequence of field lengths in the file to be parsed
+				int size = column.size();
+				LOG.info("Columns' size = %d", size);
+
+				int[]  lengths = new int[size];
+				for (int i= 0; i< size; i++){
+					lengths[i] = column.get(i).getWidth();
+				}
+				
+				// creates the default settings for a fixed width parser
+				FixedWidthParserSettings settings = new FixedWidthParserSettings(new FixedWidthFields(lengths));
+
+				//sets the character used for padding unwritten spaces in the file
+				settings.getFormat().setPadding('_');
+
+				//the file used in the example uses '\n' as the line separator sequence.
+				//the line separator sequence is defined here to ensure systems such as MacOS and Windows
+				//are able to process this file correctly (MacOS uses '\r'; and Windows uses '\r\n').
+				settings.getFormat().setLineSeparator("\n");
+
+				// creates a fixed-width parser with the given settings
+				FixedWidthParser parser = new FixedWidthParser(settings);
+
+				// parses rows line by line.
+				while ((parseRows = parser.parseLine(reader.readLine())) != null) {
+					Record record = recordSender.createRecord();
+					for (String str : parseRows) {
+						record.addColumn(new StringColumn(str));
+					}
+					recordSender.sendToWriter(record);
+				}
+			}else{
+				csvReader = new CsvReader(reader);
+				csvReader.setDelimiter(fieldDelimiter);
+				while ((parseRows = UnstructuredStorageReaderUtil
+						.splitBufferedReader(csvReader)) != null) {
+					UnstructuredStorageReaderUtil.transportOneRecord(recordSender,
+							column, parseRows, nullFormat, taskPluginCollector);
+				}
+			}
 		} catch (UnsupportedEncodingException uee) {
 			throw DataXException
 					.asDataXException(
@@ -317,7 +360,9 @@ public class UnstructuredStorageReaderUtil {
 					UnstructuredStorageReaderErrorCode.RUNTIME_EXCEPTION,
 					String.format("运行时异常 : %s", e.getMessage()), e);
 		} finally {
-		    csvReader.close();
+			if(csvReader != null){
+				csvReader.close();
+			}
 			IOUtils.closeQuietly(reader);
 		}
 	}

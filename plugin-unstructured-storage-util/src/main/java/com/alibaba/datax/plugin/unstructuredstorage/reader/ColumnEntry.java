@@ -8,11 +8,20 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSON;
 
 public class ColumnEntry {
+    private Integer width;
     private Integer index;
     private String type;
     private String value;
     private String format;
     private DateFormat dateParse;
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
 
     public Integer getIndex() {
         return index;
